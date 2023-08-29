@@ -163,6 +163,11 @@ func collectLoadingExperience(prefix string, lexp *pagespeedonline.PagespeedApiL
 			prometheus.NewDesc(fqname(prefix, "metrics", name, "duration_seconds"), "Percentile metrics for "+strings.Replace(name, "_", " ", -1), nil, constLables),
 			prometheus.GaugeValue,
 			float64(v.Percentile)/1000)
+
+		ch <- prometheus.MustNewConstMetric(
+			prometheus.NewDesc(fqname(prefix, "score", name), "The specified score for the loading experience (1 FAST / 0.5 AVERAGE / 0 SLOW)  ", nil, constLables),
+			prometheus.GaugeValue,
+			convertCategoryToScore(v.Category))
 	}
 
 }
